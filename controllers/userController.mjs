@@ -1,4 +1,4 @@
-import { User } from '../models/User.js';
+import { User } from '../models/User.mjs';
 import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
