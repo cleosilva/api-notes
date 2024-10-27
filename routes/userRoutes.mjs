@@ -26,6 +26,34 @@ const router = express.Router();
  *       500:
  *         description: Error registering user
  */
-router.post('/register', register)
+router.post('/register', register);
+
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Login a user
+ *     description: Authenticates a user and returns a JWT token.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successful login, returns JWT token.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/login', login);
 
 export default router;
