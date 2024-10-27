@@ -64,19 +64,19 @@ task-api/
 ```` 
 
 ### Folder Descriptions
-config/: Contains general project configuration, like database setup.
-controllers/: Functions to handle HTTP request logic.
-models/: Data models defined for API, such as Task and User, used by MongoDB.
-middlewares/: Middleware functions for request validation and authentication.
-routes/: API route files, defining endpoints and mapping them to controllers.
-tests/: Unit and integration tests to ensure endpoints function correctly.
-utils/: Utility functions, such as a logger, that can be used throughout the project.
+* config/: Contains general project configuration, like database setup.
+* controllers/: Functions to handle HTTP request logic.
+* models/: Data models defined for API, such as Task and User, used by MongoDB.
+* middlewares/: Middleware functions for request validation and authentication.
+* routes/: API route files, defining endpoints and mapping them to controllers.
+* tests/: Unit and integration tests to ensure endpoints function correctly.
+* utils/: Utility functions, such as a logger, that can be used throughout the project.
 
 ### Setup and Usage
 #### Prerequisites
-Node.js
-MongoDB (local or MongoDB Atlas)
-Postman or similar to test endpoints
+1. Node.js
+2. MongoDB (local or MongoDB Atlas)
+3. Postman or similar to test endpoints
 
 #### Installation Steps
 1. Clone the repository:
@@ -117,10 +117,8 @@ npm test
 #### Tasks
 * POST /api/tasks - Creates a new task (authenticated)
 * GET /api/tasks - Retrieves all tasks for the authenticated user
-* PUT /api/tasks/
-- Updates a task (authenticated)
-* DELETE /api/tasks/
-- Deletes a task (authenticated)
+* PUT /api/tasks/ - Updates a task (authenticated)
+* DELETE /api/tasks/ - Deletes a task (authenticated)
 
 ### Contribution
 Contributions are welcome! Feel free to open a pull request or report an issue.
