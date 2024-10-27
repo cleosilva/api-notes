@@ -44,7 +44,7 @@ export const startServer = async () => {
     })
 };
 
-startServer();
+//startServer();
 
 export const stopServer = async (server) => {
     return new Promise((resolve) => {
