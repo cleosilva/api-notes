@@ -120,6 +120,11 @@ npm test
 * PUT /api/tasks/ - Updates a task (authenticated)
 * DELETE /api/tasks/ - Deletes a task (authenticated)
 
+### Swagger Documentation
+````bash
+http://localhost:3000/api-docs
+````
+
 ### Contribution
 Contributions are welcome! Feel free to open a pull request or report an issue.
 
