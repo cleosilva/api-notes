@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import connectDB from './config/db.mjs';
 import userRoutes from './routes/userRoutes.mjs';
+import taskRoutes from './routes/taskRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
@@ -16,6 +17,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/users', userRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // Swagger definitions
 const swaggerOptions = {
@@ -44,7 +46,7 @@ export const startServer = async () => {
     })
 };
 
-//startServer();
+startServer();
 
 export const stopServer = async (server) => {
     return new Promise((resolve) => {
