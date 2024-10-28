@@ -4,11 +4,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import connectDB from './config/db.mjs';
 import userRoutes from './routes/userRoutes.mjs';
+import taskRoutes from './routes/taskRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
 const app = express();
-
 connectDB();
 
 app.use(express.json());
@@ -16,6 +16,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/users', userRoutes);
+app.use('/api/tasks', taskRoutes);
 
 // Swagger definitions
 const swaggerOptions = {
@@ -35,23 +36,40 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000;
 
-export const startServer = async () => {
-    return new Promise((resolve) => {
-        const server = app.listen(PORT, () => {
-            console.log(`Server running on PORT:${PORT}`);
-            resolve(server);
-        })
-    })
-};
 
-//startServer();
 
-export const stopServer = async (server) => {
-    return new Promise((resolve) => {
-        server.close(() => {
-            console.log('Server closed');
-            resolve();
-        })
-    })
-};
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Server running on PORT:${PORT}`);
+    });
+}
+// export const startServer = async () => {
+//     return new Promise((resolve) => {
+//         const server = app.listen(PORT, () => {
+//             console.log(`Server running on PORT:${PORT}`);
+//             resolve(server);
+//         })
+//     })
+// };
 
+// //startServer();
+
+// export const stopServer = async (server) => {
+//     return new Promise((resolve) => {
+//         if (server) {
+//             server.close(() => {
+//                 console.log('Server closed');
+//                 resolve();
+//             })
+//         } else {
+//             resolve();
+//         }
+//     })
+// };
+
+// afterAll(async () => {
+//     await stopServer();
+//     await mongoose.connection.close();
+// });
+
+export default app;

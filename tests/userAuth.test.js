@@ -1,21 +1,10 @@
 import request from "supertest";
-import mongoose from "mongoose";
-import { startServer, stopServer } from "../app.mjs";
+import app from "../app.mjs";
 
-let server;
-
-beforeAll(async () => {
-    server = await startServer();
-});
-
-afterAll(async () => {
-    await mongoose.connection.close();
-    await stopServer(server);
-})
 
 describe('User Authentication', () => {
     it('should register a new user', async () => {
-        const response = await request(server)
+        const response = await request(app)
             .post('/api/users/register')
             .send({
                 username: 'testuser',
@@ -33,7 +22,7 @@ describe('User Authentication', () => {
 
         //await User.create(userPayload);
 
-        const response = await request(server)
+        const response = await request(app)
             .post('/api/users/login')
             .send(userPayload);
 
@@ -42,7 +31,7 @@ describe('User Authentication', () => {
     });
 
     it('should return 401 for invalid credentials', async () => {
-        const response = await request(server)
+        const response = await request(app)
             .post('/api/users/login')
             .send({
                 username: 'wronguser',
