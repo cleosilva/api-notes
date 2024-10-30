@@ -23,9 +23,23 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'User API',
+            title: 'Task API',
             version: '1.0.0',
-            description: 'API for user registration and authentication',
+            description: 'API para gerenciamento de usuários e tarefas',
+        },
+        servers: [
+            {
+                url: `http://localhost:${process.env.PORT || 3000}/api`, // URL do servidor
+            },
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT', // Formato do token
+                },
+            },
         },
     },
     apis: ['./routes/*.mjs'],
@@ -43,33 +57,5 @@ if (process.env.NODE_ENV !== 'test') {
         console.log(`Server running on PORT:${PORT}`);
     });
 }
-// export const startServer = async () => {
-//     return new Promise((resolve) => {
-//         const server = app.listen(PORT, () => {
-//             console.log(`Server running on PORT:${PORT}`);
-//             resolve(server);
-//         })
-//     })
-// };
-
-// //startServer();
-
-// export const stopServer = async (server) => {
-//     return new Promise((resolve) => {
-//         if (server) {
-//             server.close(() => {
-//                 console.log('Server closed');
-//                 resolve();
-//             })
-//         } else {
-//             resolve();
-//         }
-//     })
-// };
-
-// afterAll(async () => {
-//     await stopServer();
-//     await mongoose.connection.close();
-// });
 
 export default app;
