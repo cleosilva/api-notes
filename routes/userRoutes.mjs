@@ -5,7 +5,7 @@ import { register, login } from '../controllers/userController.mjs';
 const router = express.Router();
 /**
  * @swagger
- * /api/users/register:
+ * /users/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
@@ -30,7 +30,7 @@ router.post('/register', register);
 
 /**
  * @swagger
- * /api/users/login:
+ * /users/login:
  *   post:
  *     summary: Login a user
  *     description: Authenticates a user and returns a JWT token.
