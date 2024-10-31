@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import connectDB from './config/db.mjs';
 import userRoutes from './routes/userRoutes.mjs';
-import taskRoutes from './routes/taskRoutes.mjs'
+import taskRoutes from './routes/noteRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import logger from './utils/logger.mjs';
@@ -22,21 +22,21 @@ app.use((req, res, next) => {
 })
 
 
-app.use('/api/users', userRoutes);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notes', taskRoutes);
 
 // Swagger definitions
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Task API',
+            title: 'Note API',
             version: '1.0.0',
-            description: 'API para gerenciamento de usuários e tarefas',
+            description: 'API para gerenciamento de usuários e notas',
         },
         servers: [
             {
-                url: `http://localhost:${process.env.PORT || 3000}/api`, // URL do servidor
+                url: `http://localhost:${process.env.PORT || 3000}/api/v1`, // URL do servidor
             },
         ],
         components: {

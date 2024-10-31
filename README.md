@@ -1,20 +1,20 @@
 # Task API
 
-A RESTful API for managing tasks with authentication and authorization features. This project is built using Node.js and MongoDB, following a modular architecture to ensure scalability and maintainability. It serves as a sample project to demonstrate best practices in RESTful API development with JWT authentication.
+A RESTful API for managing notes with authentication and authorization features. This project is built using Node.js and MongoDB, following a modular architecture to ensure scalability and maintainability. It serves as a sample project to demonstrate best practices in RESTful API development with JWT authentication.
 
 ## Purpose
 
-The purpose of this project is to provide a sample API for a task management system. It implements CRUD operations (create, read, update, delete) for tasks and includes user authentication using JWT tokens. This project can be used as a base for other systems or as part of a portfolio.
+The purpose of this project is to provide a sample API for a task management system. It implements CRUD operations (create, read, update, delete) for notes and includes user authentication using JWT tokens. This project can be used as a base for other systems or as part of a portfolio.
 
 ## Features
 
 - **User registration and login** with JWT authentication
-- **CRUD operations** for tasks:
+- **CRUD operations** for notes:
   - Create new task
-  - List tasks
+  - List notes
   - Update task
   - Delete task
-- **User authorization** for accessing specific tasks
+- **User authorization** for accessing specific notes
 - **Route protection** using authentication middleware
 - **Swagger documentation** for easy integration and testing
 
@@ -114,11 +114,11 @@ npm test
 * POST /api/users/register - Registers a new user
 * POST /api/users/login - Authenticates a user and returns a JWT token
 
-#### Tasks
-* POST /api/tasks - Creates a new task (authenticated)
-* GET /api/tasks - Retrieves all tasks for the authenticated user
-* PUT /api/tasks/ - Updates a task (authenticated)
-* DELETE /api/tasks/ - Deletes a task (authenticated)
+#### notes
+* POST /api/notes - Creates a new task (authenticated)
+* GET /api/notes - Retrieves all notes for the authenticated user
+* PUT /api/notes/ - Updates a task (authenticated)
+* DELETE /api/notes/ - Deletes a task (authenticated)
 
 ### Swagger Documentation
 ````bash
