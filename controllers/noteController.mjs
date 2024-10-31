@@ -16,7 +16,32 @@ export const createNote = async (req, res) => {
 
 export const getNotes = async (req, res) => {
     try {
-        const notes = await Note.find({ userId: req.user.id });
+        const { title, tag, done } = req.query;
+
+        console.log('title', title)
+        console.log('done', done)
+        console.log('tag', tag)
+
+
+        let filter = { userId: req.user.id }
+
+
+        if (title) {
+            filter.title = { $regex: title.trim(), $options: "i" }
+        }
+
+        if (tag) {
+            filter.tags = tag.trim();
+        }
+
+        if (done !== undefined) {
+            filter.checklist = { $elemMatch: { done: done === "true" } };
+        }
+
+        console.log('Filter:', filter);
+
+        const notes = await Note.find(filter);
+        console.log('notes', notes)
         logger.info(`Get notes for user ${req.user.id}`);
         res.status(200).json(notes);
     } catch (error) {
