@@ -16,12 +16,7 @@ export const createNote = async (req, res) => {
 
 export const getNotes = async (req, res) => {
     try {
-        const { title, tag, done } = req.query;
-
-        console.log('title', title)
-        console.log('done', done)
-        console.log('tag', tag)
-
+        const { title, tag, done, archived } = req.query;
 
         let filter = { userId: req.user.id }
 
@@ -36,6 +31,10 @@ export const getNotes = async (req, res) => {
 
         if (done !== undefined) {
             filter.checklist = { $elemMatch: { done: done === "true" } };
+        }
+
+        if (archived !== undefined) {
+            filter.archived = archived === "true";
         }
 
         console.log('Filter:', filter);
@@ -85,3 +84,25 @@ export const deleteNote = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const toggleArchiveNote = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const note = await Note.findOne({ _id: id, userId: req.user.id });
+        if (!note) {
+            return res.status(404).json({ message: "Note not found!" });
+        }
+
+        note.archived = !note.archived;
+        await note.save();
+
+        const status = note.archived ? 'archived' : 'unarchived';
+        logger.info(`Note with ID ${id} has been ${status} for use ${req.user.id}`);
+
+        res.status(200).json({ message: `Note ${status} successfully!`, note })
+    } catch (error) {
+        logger.error(`Error toggling archive status for note with ID ${id}: ${error.message}`);
+        res.status(500).json({ message: error.message });
+    }
+}

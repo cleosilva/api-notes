@@ -7,11 +7,12 @@ const ckeckListItemSchema = new mongoose.Schema({
 
 const noteschema = new mongoose.Schema({
     title: { type: String, required: true },
-    content: { type: String, required: false }, // Conteúdo da nota
-    tags: [{ type: String }], // Etiqueta (tags)
-    color: { type: String, default: '#ffffff' }, // Cor da nota, padrão branca
+    content: { type: String, required: false },
+    tags: [{ type: String }],
+    color: { type: String, default: '#ffffff' },
     checklist: [ckeckListItemSchema],
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    archived: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });

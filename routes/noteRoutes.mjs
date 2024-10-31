@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, deleteNote, getNotes, updateNote } from '../controllers/noteController.mjs';
+import { createNote, deleteNote, getNotes, toggleArchiveNote, updateNote } from '../controllers/noteController.mjs';
 import { authenticateJWT } from '../middlewares/auth.mjs';
 
 const router = express.Router();
@@ -210,5 +210,7 @@ router.put('/:id', authenticateJWT, updateNote);
  *         description: Erro no servidor
  */
 router.delete('/:id', authenticateJWT, deleteNote);
+
+router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
 
 export default router;
