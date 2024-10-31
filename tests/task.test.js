@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../app.mjs";
 
-const token = process.env.BEARER_TOKEN
+const token = process.env.BEARER_TOKEN_TEST
 let taskId;
 
 describe('Task API', () => {
