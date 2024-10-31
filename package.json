@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
-    "start": "node app.mjs --watchAll"
+    "test": "jest --forceExit --detectOpenHandles --maxWorkers=1",
+    "start": "node app.mjs"
   },
   "keywords": [],
   "author": "",
