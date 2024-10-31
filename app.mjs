@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.mjs';
 import taskRoutes from './routes/taskRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
+import logger from './utils/logger.mjs';
 
 const app = express();
 connectDB();
@@ -14,6 +15,12 @@ connectDB();
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
+
+app.use((req, res, next) => {
+    logger.info(`${req.method} ${req.url}`);
+    next();
+})
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
