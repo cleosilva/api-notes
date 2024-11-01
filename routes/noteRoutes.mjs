@@ -87,46 +87,40 @@ router.post('/', authenticateJWT, createNote);
  * @swagger
  * /notes:
  *   get:
- *     summary: Retorna todas as notas do usuário
+ *     summary: Obtém as notas do usuário com filtros opcionais
+ *     description: Retorna uma lista de notas que pertencem ao usuário autenticado. Filtros opcionais permitem busca por título, tags e status de checklist.
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Filtro pelo título da nota (busca parcial, insensível a maiúsculas/minúsculas).
+ *       - in: query
+ *         name: tag
+ *         schema:
+ *           type: string
+ *         description: Filtro por tag específica.
+ *       - in: query
+ *         name: done
+ *         schema:
+ *           type: boolean
+ *         description: Filtro por status do checklist (true para concluído, false para não concluído).
  *     responses:
  *       200:
- *         description: Lista de notas do usuário
+ *         description: Lista de notas do usuário.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   title:
- *                     type: string
- *                   content:
- *                     type: string
- *                   tags:
- *                     type: array
- *                     items:
- *                       type: string
- *                   color:
- *                     type: string
- *                   checklist:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         item:
- *                           type: string
- *                         done:
- *                           type: boolean
- *                   _id:
- *                     type: string
- *                     example: "someUniqueId"
+ *                 $ref: '#/components/schemas/Note'
  *       403:
- *         description: Não autorizado
+ *         description: Usuário não autorizado (token inválido ou não fornecido).
  *       500:
- *         description: Erro no servidor
+ *         description: Erro interno do servidor.
  */
 
 router.get('/', authenticateJWT, getNotes);
@@ -211,6 +205,38 @@ router.put('/:id', authenticateJWT, updateNote);
  */
 router.delete('/:id', authenticateJWT, deleteNote);
 
+/**
+ * @swagger
+ * /notes/{id}/archive:
+ *   patch:
+ *     summary: Arquiva ou desarquiva uma nota
+ *     description: Atualiza o status de arquivamento de uma nota específica para o usuário autenticado.
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: O ID da nota a ser arquivada ou desarquivada.
+ *     responses:
+ *       200:
+ *         description: Status de arquivamento atualizado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Note'
+ *       400:
+ *         description: ID de nota inválido ou outra entrada inválida.
+ *       403:
+ *         description: Usuário não autorizado.
+ *       404:
+ *         description: Nota não encontrada.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
 router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
 
 export default router;

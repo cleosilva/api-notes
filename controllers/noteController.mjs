@@ -37,10 +37,7 @@ export const getNotes = async (req, res) => {
             filter.archived = archived === "true";
         }
 
-        console.log('Filter:', filter);
-
         const notes = await Note.find(filter);
-        console.log('notes', notes)
         logger.info(`Get notes for user ${req.user.id}`);
         res.status(200).json(notes);
     } catch (error) {

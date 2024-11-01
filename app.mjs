@@ -25,18 +25,18 @@ app.use((req, res, next) => {
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/notes', taskRoutes);
 
-// Swagger definitions
+
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Note API',
+            title: 'Notes API',
             version: '1.0.0',
-            description: 'API para gerenciamento de usuários e notas',
+            description: 'API para gerenciamento de notas com filtros avançados',
         },
         servers: [
             {
-                url: `http://localhost:${process.env.PORT || 3000}/api/v1`, // URL do servidor
+                url: `http://localhost:${process.env.PORT || 3000}/api/v1`,
             },
         ],
         components: {
@@ -44,10 +44,42 @@ const swaggerOptions = {
                 bearerAuth: {
                     type: 'http',
                     scheme: 'bearer',
-                    bearerFormat: 'JWT', // Formato do token
+                    bearerFormat: 'JWT',
                 },
             },
-        },
+            schemas: {
+                CheckListItem: {
+                    type: 'object',
+                    properties: {
+                        item: { type: 'string' },
+                        done: { type: 'boolean' }
+                    },
+                    required: ['item']
+                },
+                Note: {
+                    type: 'object',
+                    properties: {
+                        _id: { type: 'string' },
+                        title: { type: 'string' },
+                        content: { type: 'string' },
+                        tags: {
+                            type: 'array',
+                            items: { type: 'string' }
+                        },
+                        color: { type: 'string', default: '#ffffff' },
+                        checklist: {
+                            type: 'array',
+                            items: { $ref: '#/components/schemas/CheckListItem' }
+                        },
+                        userId: { type: 'string' },
+                        archived: { type: 'boolean', default: false },
+                        createdAt: { type: 'string', format: 'date-time' },
+                        updatedAt: { type: 'string', format: 'date-time' },
+                    },
+                    required: ['title', 'userId']
+                }
+            }
+        }
     },
     apis: ['./routes/*.mjs'],
 };
