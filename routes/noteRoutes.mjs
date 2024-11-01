@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, deleteNote, getNotes, reorderNotes, toggleArchiveNote, updateNote } from '../controllers/noteController.mjs';
+import { createNote, deleteNote, getNotes, reorderNotes, toggleArchiveNote, togglePinNote, updateNote } from '../controllers/noteController.mjs';
 import { authenticateJWT } from '../middlewares/auth.mjs';
 
 const router = express.Router();
@@ -284,5 +284,61 @@ router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
  *                   example: "Error sorting notes."
  */
 router.patch('/reorder', authenticateJWT, reorderNotes);
+
+/**
+ * @swagger
+ * paths:
+ *   /notes/{id}/pin:
+ *     patch:
+ *       tags:
+ *         - Notes
+ *       summary: Pin/Unpin a note
+ *       description: Alterna o estado de fixação de uma nota, colocando-a no topo da lista se fixada ou removendo-a do topo se desfixada.
+ *       operationId: pinNote
+ *       security:
+ *         - bearerAuth: []
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: ID da nota a ser fixada ou desfixada.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         200:
+ *           description: Note pinned/unpinned successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: "Note pinned successfully."
+ *                   note:
+ *                     $ref: '#/components/schemas/Note'
+ *         404:
+ *           description: Note not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: "Note not found!"
+ *         500:
+ *           description: Error pinning/unpinning note
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: "Error pinning/unpinning note"
+ * 
+ */
+router.patch('/:id/pin', authenticateJWT, togglePinNote);
 
 export default router;

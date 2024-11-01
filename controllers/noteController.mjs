@@ -37,7 +37,8 @@ export const getNotes = async (req, res) => {
             filter.archived = archived === "true";
         }
 
-        const notes = await Note.find(filter).sort({ order: 1 })
+        const notes = await Note.find(filter).sort({ isPinned: -1, order: 1 });
+
         logger.info(`Get notes for user ${req.user.id}`);
         res.status(200).json(notes);
     } catch (error) {
@@ -124,3 +125,23 @@ export const reorderNotes = async (req, res) => {
         res.status(500).json({ message: "Error sorting notes" });
     }
 };
+
+export const togglePinNote = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const note = await Note.findOne({ _id: id, userId: req.user.id });
+        if (!note) {
+            return res.status(404).json({ message: "Note not found!" });
+        }
+        note.isPinned = !note.isPinned;
+        await note.save();
+
+        const status = note.isPinned ? 'pinned' : 'unpinned';
+        logger.info(`Note with ID ${id} has been ${status} for use ${req.user.id}`);
+        res.status(200).json({ message: `Note ${status} successfully.`, note });
+    } catch (error) {
+        logger.error(`Error toggling pin status for note with ID ${id}: ${error.message}`);
+        res.status(500).json({ message: "Error pinning/unpinning note" });
+    }
+}
