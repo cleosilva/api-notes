@@ -20,7 +20,10 @@ describe('note API', () => {
                     "done": false
                 }
             ],
-            "archived": false
+            "archived": false,
+            "isPinned": false,
+            "order:": 0
+
         }
         const response = await request(app)
             .post('/api/v1/notes')
@@ -79,7 +82,9 @@ describe('note API', () => {
                     "done": false
                 }
             ],
-            "archived": false
+            "archived": false,
+            "isPinned": false,
+            "order:": 0
         }
         const response = await request(app)
             .put(`/api/v1/notes/${noteId}`)
@@ -90,6 +95,42 @@ describe('note API', () => {
         expect(response.body.title).toBe(updatedData.title);
         expect(response.body.content).toBe(updatedData.content);
         expect(response.body.archived).toBe(false);
+    });
+
+    it('should pin a note', async () => {
+        const pinResponse = await request(app)
+            .patch(`/api/v1/notes/${noteId}/pin`)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(pinResponse.statusCode).toBe(200);
+        expect(pinResponse.body.message).toBe("Note pinned successfully.");
+        expect(pinResponse.body.note.isPinned).toBe(true);
+    });
+
+    it('should unpin a note', async () => {
+        const unpinResponse = await request(app)
+            .patch(`/api/v1/notes/${noteId}/pin`)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(unpinResponse.statusCode).toBe(200);
+        expect(unpinResponse.body.message).toBe("Note unpinned successfully.");
+        expect(unpinResponse.body.note.isPinned).toBe(false);
+    });
+
+    it('should reorder notes', async () => {
+        const reorderedNotes = [
+            noteId,
+            "64bfbb4f2a4e5c1a12345678",
+            "64bfbb4f2a4e5c1a87654321"
+        ];
+
+        const response = await request(app)
+            .patch('/api/v1/notes/reorder')
+            .set('Authorization', `Bearer ${token}`)
+            .send({ orderedNotes: reorderedNotes });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.message).toBe("Notes ordered successfully.");
     });
 
     it('should delete a note', async () => {
