@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, deleteNote, getNotes, toggleArchiveNote, updateNote } from '../controllers/noteController.mjs';
+import { createNote, deleteNote, getNotes, reorderNotes, toggleArchiveNote, updateNote } from '../controllers/noteController.mjs';
 import { authenticateJWT } from '../middlewares/auth.mjs';
 
 const router = express.Router();
@@ -238,5 +238,51 @@ router.delete('/:id', authenticateJWT, deleteNote);
  *         description: Erro interno do servidor.
  */
 router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
+
+/**
+ * @swagger
+ * /notes/reorder:
+ *   patch:
+ *     summary: Reorder notes
+ *     description: Reordena as notas do usuário com base em uma lista de IDs fornecida.
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               orderedNotes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *             example:
+ *               orderedNotes: ["64bfbb4f2a4e5c1a12345678", "64bfbb4f2a4e5c1a87654321", "64bfbb4f2a4e5c1a11112222"]
+ *     responses:
+ *       200:
+ *         description: Notes reordered successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Notes ordered successfully."
+ *       500:
+ *         description: Error sorting notes.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error sorting notes."
+ */
+router.patch('/reorder', authenticateJWT, reorderNotes);
 
 export default router;

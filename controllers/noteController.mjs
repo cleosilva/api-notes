@@ -37,7 +37,7 @@ export const getNotes = async (req, res) => {
             filter.archived = archived === "true";
         }
 
-        const notes = await Note.find(filter);
+        const notes = await Note.find(filter).sort({ order: 1 })
         logger.info(`Get notes for user ${req.user.id}`);
         res.status(200).json(notes);
     } catch (error) {
@@ -103,3 +103,24 @@ export const toggleArchiveNote = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const reorderNotes = async (req, res) => {
+    try {
+        const { orderedNotes } = req.body;
+
+        await Promise.all(
+            orderedNotes.map((noteId, index) => Note.findByIdAndUpdate(
+                { _id: noteId, userId: req.user.id },
+                { order: index }
+            )
+            )
+        );
+
+        logger.info(`Notes reordered for user ${req.user.id}`)
+
+        res.status(200).json({ message: "Notes ordered successfully." });
+    } catch (error) {
+        logger.error(`Error sorting notes for user ${req.user.id}: ${error.message}`);
+        res.status(500).json({ message: "Error sorting notes" });
+    }
+};

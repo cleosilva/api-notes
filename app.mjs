@@ -73,6 +73,7 @@ const swaggerOptions = {
                         },
                         userId: { type: 'string' },
                         archived: { type: 'boolean', default: false },
+                        order: { type: Number, default: 0 },
                         createdAt: { type: 'string', format: 'date-time' },
                         updatedAt: { type: 'string', format: 'date-time' },
                     },
