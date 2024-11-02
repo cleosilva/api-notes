@@ -7,7 +7,7 @@ describe('User Authentication', () => {
         const response = await request(app)
             .post('/api/v1/users/register')
             .send({
-                username: 'testuser',
+                username: 'testuser@example.com',
                 password: 'testpassword'
             });
         expect(response.statusCode).toBe(201);
@@ -16,11 +16,10 @@ describe('User Authentication', () => {
 
     it('should login an existing user and return a token', async () => {
         const userPayload = {
-            username: 'testuser',
+            username: 'testuser@example.com',
             password: 'testpassword'
         };
 
-        //await User.create(userPayload);
 
         const response = await request(app)
             .post('/api/v1/users/login')
@@ -34,7 +33,7 @@ describe('User Authentication', () => {
         const response = await request(app)
             .post('/api/v1/users/login')
             .send({
-                username: 'wronguser',
+                username: 'wronguser@example.com',
                 password: 'wrongpassword'
             });
         expect(response.statusCode).toBe(401);

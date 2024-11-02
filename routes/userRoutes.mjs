@@ -18,8 +18,10 @@ const router = express.Router();
  *             properties:
  *               username:
  *                 type: string
+ *                 format: email 
  *               password:
  *                 type: string
+ *                 minLength: 8
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -39,13 +41,15 @@ router.post('/register', register);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
+ *           schema:    
  *             type: object
  *             properties:
  *               username:
  *                 type: string
+ *                 format: email
  *               password:
  *                 type: string
+ *                 minLength: 8
  *     responses:
  *       200:
  *         description: Successful login, returns JWT token.
