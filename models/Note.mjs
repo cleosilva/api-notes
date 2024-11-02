@@ -15,6 +15,8 @@ const noteschema = new mongoose.Schema({
     archived: { type: Boolean, default: false },
     isPinned: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+    reminder: Date,
+    notified: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });

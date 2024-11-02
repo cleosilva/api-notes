@@ -144,4 +144,19 @@ export const togglePinNote = async (req, res) => {
         logger.error(`Error toggling pin status for note with ID ${id}: ${error.message}`);
         res.status(500).json({ message: "Error pinning/unpinning note" });
     }
-}
+};
+
+export const setReminder = async (req, res) => {
+    const { id } = req.params;
+    const { reminder } = req.body;
+
+    try {
+        const note = await Note.findByIdAndUpdate(id, { reminder, notified: false }, { new: true });
+        if (!note) {
+            return res.status(404).json({ message: "Note not found!" });
+        }
+        res.status(200).json(note);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

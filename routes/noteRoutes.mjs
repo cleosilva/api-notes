@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, deleteNote, getNotes, reorderNotes, toggleArchiveNote, togglePinNote, updateNote } from '../controllers/noteController.mjs';
+import { createNote, deleteNote, getNotes, reorderNotes, setReminder, toggleArchiveNote, togglePinNote, updateNote } from '../controllers/noteController.mjs';
 import { authenticateJWT } from '../middlewares/auth.mjs';
 
 const router = express.Router();
@@ -340,5 +340,7 @@ router.patch('/reorder', authenticateJWT, reorderNotes);
  * 
  */
 router.patch('/:id/pin', authenticateJWT, togglePinNote);
+
+router.patch('/:id/setReminder', authenticateJWT, setReminder);
 
 export default router;
