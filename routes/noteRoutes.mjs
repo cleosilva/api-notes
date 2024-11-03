@@ -8,7 +8,7 @@ const router = express.Router();
  * @swagger
  * /notes:
  *   post:
- *     summary: Cria uma nova nota
+ *     summary: Creates a new note
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
@@ -21,15 +21,15 @@ const router = express.Router();
  *             properties:
  *               title:
  *                 type: string
- *                 example: "Revisão de JavaScript"
+ *                 example: "JavaScript Review"
  *               content:
  *                 type: string
- *                 example: "Estudar closures e promises"
+ *                 example: "Study closures and promises"
  *               tags:
  *                 type: array
  *                 items:
  *                   type: string
- *                 example: ["estudo", "javascript"]
+ *                 example: ["study", "javascript"]
  *               color:
  *                 type: string
  *                 example: "#FFDDC1"
@@ -40,13 +40,13 @@ const router = express.Router();
  *                   properties:
  *                     item:
  *                       type: string
- *                       example: "Entender async/await"
+ *                       example: "Understand async/await"
  *                     done:
  *                       type: boolean
  *                       example: false
  *     responses:
  *       201:
- *         description: Nota criada com sucesso
+ *         description: Note created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -75,11 +75,11 @@ const router = express.Router();
  *                   type: string
  *                   example: "someUniqueId"
  *       400:
- *         description: Requisição inválida
+ *         description: Invalid request
  *       403:
- *         description: Não autorizado
+ *         description: Unauthorized
  *       500:
- *         description: Erro no servidor
+ *         description: Server error
  */
 router.post('/', authenticateJWT, createNote);
 
@@ -87,8 +87,8 @@ router.post('/', authenticateJWT, createNote);
  * @swagger
  * /notes:
  *   get:
- *     summary: Obtém as notas do usuário com filtros opcionais
- *     description: Retorna uma lista de notas que pertencem ao usuário autenticado. Filtros opcionais permitem busca por título, tags e status de checklist.
+ *     summary: Retrieves the user's notes with optional filters
+ *     description: Returns a list of notes belonging to the authenticated user. Optional filters allow searching by title, tags, and checklist status.
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
@@ -97,20 +97,20 @@ router.post('/', authenticateJWT, createNote);
  *         name: title
  *         schema:
  *           type: string
- *         description: Filtro pelo título da nota (busca parcial, insensível a maiúsculas/minúsculas).
+ *         description: Filter by the note's title (partial case-insensitive search).
  *       - in: query
  *         name: tag
  *         schema:
  *           type: string
- *         description: Filtro por tag específica.
+ *         description: Filter by specific tag.
  *       - in: query
  *         name: done
  *         schema:
  *           type: boolean
- *         description: Filtro por status do checklist (true para concluído, false para não concluído).
+ *         description: Filter by checklist status (true for completed, false for not completed).
  *     responses:
  *       200:
- *         description: Lista de notas do usuário.
+ *         description: List of user's notes.
  *         content:
  *           application/json:
  *             schema:
@@ -118,18 +118,17 @@ router.post('/', authenticateJWT, createNote);
  *               items:
  *                 $ref: '#/components/schemas/Note'
  *       403:
- *         description: Usuário não autorizado (token inválido ou não fornecido).
+ *         description: Unauthorized user (invalid or missing token).
  *       500:
- *         description: Erro interno do servidor.
+ *         description: Internal server error.
  */
-
 router.get('/', authenticateJWT, getNotes);
 
 /**
  * @swagger
  * /notes/{id}:
  *   put:
- *     summary: Atualiza uma nota existente
+ *     summary: Updates an existing note
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
@@ -139,7 +138,7 @@ router.get('/', authenticateJWT, getNotes);
  *         schema:
  *           type: string
  *         required: true
- *         description: ID da nota a ser atualizada
+ *         description: ID of the note to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -168,49 +167,22 @@ router.get('/', authenticateJWT, getNotes);
  *                       type: boolean
  *     responses:
  *       200:
- *         description: Nota atualizada com sucesso
+ *         description: Note updated successfully
  *       404:
- *         description: Nota não encontrada
+ *         description: Note not found
  *       403:
- *         description: Não autorizado
+ *         description: Unauthorized
  *       500:
- *         description: Erro no servidor
+ *         description: Server error
  */
 router.put('/:id', authenticateJWT, updateNote);
 
 /**
  * @swagger
- * /notes/{id}:
- *   delete:
- *     summary: Exclui uma nota existente
- *     tags: [Notes]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID da nota a ser excluída
- *     responses:
- *       200:
- *         description: Nota excluída com sucesso
- *       404:
- *         description: Nota não encontrada
- *       403:
- *         description: Não autorizado
- *       500:
- *         description: Erro no servidor
- */
-router.delete('/:id', authenticateJWT, deleteNote);
-
-/**
- * @swagger
  * /notes/{id}/archive:
  *   patch:
- *     summary: Arquiva ou desarquiva uma nota
- *     description: Atualiza o status de arquivamento de uma nota específica para o usuário autenticado.
+ *     summary: Archives or unarchives a note
+ *     description: Updates the archiving status of a specific note for the authenticated user.
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
@@ -220,22 +192,22 @@ router.delete('/:id', authenticateJWT, deleteNote);
  *         required: true
  *         schema:
  *           type: string
- *         description: O ID da nota a ser arquivada ou desarquivada.
+ *         description: The ID of the note to be archived or unarchived.
  *     responses:
  *       200:
- *         description: Status de arquivamento atualizado com sucesso.
+ *         description: Archiving status updated successfully.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Note'
  *       400:
- *         description: ID de nota inválido ou outra entrada inválida.
+ *         description: Invalid note ID or other invalid input.
  *       403:
- *         description: Usuário não autorizado.
+ *         description: Unauthorized user.
  *       404:
- *         description: Nota não encontrada.
+ *         description: Note not found.
  *       500:
- *         description: Erro interno do servidor.
+ *         description: Internal server error.
  */
 router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
 
@@ -244,7 +216,7 @@ router.patch('/:id/archive', authenticateJWT, toggleArchiveNote);
  * /notes/reorder:
  *   patch:
  *     summary: Reorder notes
- *     description: Reordena as notas do usuário com base em uma lista de IDs fornecida.
+ *     description: Reorders the user's notes based on a provided list of IDs.
  *     tags: [Notes]
  *     security:
  *       - bearerAuth: []
@@ -287,60 +259,120 @@ router.patch('/reorder', authenticateJWT, reorderNotes);
 
 /**
  * @swagger
- * paths:
- *   /notes/{id}/pin:
- *     patch:
- *       tags:
- *         - Notes
- *       summary: Pin/Unpin a note
- *       description: Alterna o estado de fixação de uma nota, colocando-a no topo da lista se fixada ou removendo-a do topo se desfixada.
- *       operationId: pinNote
- *       security:
- *         - bearerAuth: []
- *       parameters:
- *         - name: id
- *           in: path
- *           required: true
- *           description: ID da nota a ser fixada ou desfixada.
- *           schema:
- *             type: string
- *       responses:
- *         200:
- *           description: Note pinned/unpinned successfully
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: "Note pinned successfully."
- *                   note:
- *                     $ref: '#/components/schemas/Note'
- *         404:
- *           description: Note not found
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: "Note not found!"
- *         500:
- *           description: Error pinning/unpinning note
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: "Error pinning/unpinning note"
- * 
+ * /notes/{id}/pin:
+ *   patch:
+ *     tags:
+ *       - Notes
+ *     summary: Pin/Unpin a note
+ *     description: Toggles the pin status of a note, placing it at the top of the list if pinned or removing it from the top if unpinned.
+ *     operationId: pinNote
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the note to be pinned or unpinned.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Note pinned/unpinned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Note pinned successfully."
+ *                 note:
+ *                   $ref: '#/components/schemas/Note'
+ *       404:
+ *         description: Note not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Note not found!"
+ *       500:
+ *         description: Error pinning/unpinning note
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error pinning/unpinning note"
  */
 router.patch('/:id/pin', authenticateJWT, togglePinNote);
 
+/**
+ * @swagger
+ * /notes/{id}/reminder:
+ *   patch:
+ *     summary: Sets a reminder for a note
+ *     description: Sets a reminder for a specific note to notify the user at the specified time.
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the note to set a reminder for.
+ *       - in: query
+ *         name: time
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Time to set the reminder.
+ *     responses:
+ *       200:
+ *         description: Reminder set successfully.
+ *       400:
+ *         description: Invalid time format or note ID.
+ *       403:
+ *         description: Unauthorized user.
+ *       404:
+ *         description: Note not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.patch('/:id/setReminder', authenticateJWT, setReminder);
+
+/**
+ * @swagger
+ * /notes/{id}:
+ *   delete:
+ *     summary: Deletes an existing note
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the note to be deleted
+ *     responses:
+ *       200:
+ *         description: Note deleted successfully
+ *       404:
+ *         description: Note not found
+ *       403:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.delete('/:id', authenticateJWT, deleteNote);
 
 export default router;

@@ -32,7 +32,7 @@ const swaggerOptions = {
         info: {
             title: 'Notes API',
             version: '1.0.0',
-            description: 'API para gerenciamento de notas com filtros avançados',
+            description: 'API for managing notes with advanced filters',
         },
         servers: [
             {
@@ -73,7 +73,10 @@ const swaggerOptions = {
                         },
                         userId: { type: 'string' },
                         archived: { type: 'boolean', default: false },
-                        order: { type: Number, default: 0 },
+                        isPinned: { type: 'boolean', default: false },
+                        order: { type: 'number', default: 0 },
+                        reminder: Date,
+                        notified: { type: 'boolean', default: false },
                         createdAt: { type: 'string', format: 'date-time' },
                         updatedAt: { type: 'string', format: 'date-time' },
                     },
