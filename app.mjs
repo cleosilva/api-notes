@@ -36,7 +36,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: `http://localhost:${process.env.PORT || 3000}/api/v1`,
+                url: `http://localhost:${process.env.PORT || 5000}/api/v1`,
             },
         ],
         components: {
@@ -91,7 +91,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 
 
