@@ -2,8 +2,15 @@ import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    username: {
+        type: String, required: true, unique: true, validate: {
+            validator: (v) => {
+                return /\S+@\S+\.\S+/.test(v);
+            },
+            message: (props) => `${props.value} invalid email!`
+        }
+    },
+    password: { type: String, required: true, minlength: [8, 'The password should be 8 caracteres long'] }
 });
 
 userSchema.pre('save', async function (next) {
