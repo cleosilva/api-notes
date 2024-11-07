@@ -5,6 +5,7 @@ import cors from 'cors';
 import connectDB from './config/db.mjs';
 import userRoutes from './routes/userRoutes.mjs';
 import taskRoutes from './routes/noteRoutes.mjs'
+import tagRoutes from './routes/tagRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import logger from './utils/logger.mjs';
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/notes', taskRoutes);
+app.use('/api/v1/tags', tagRoutes);
 
 
 const swaggerOptions = {

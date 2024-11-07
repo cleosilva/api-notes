@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login } from '../controllers/userController.mjs';
+import { register, login, refreshToken } from '../controllers/userController.mjs';
 
 
 const router = express.Router();
@@ -59,5 +59,8 @@ router.post('/register', register);
  *         description: Internal server error.
  */
 router.post('/login', login);
+
+router.post('/refresh', refreshToken);
+
 
 export default router;

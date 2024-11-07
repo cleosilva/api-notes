@@ -160,3 +160,62 @@ export const setReminder = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const addCheckListItem = async (req, res) => {
+    const { noteId } = req.params;
+    const { item } = req.body;
+
+    try {
+        const note = await Note.findOneAndUpdate(
+            { _id: noteId, userId: req.user.id },
+            { $push: { checklist: { item, done: false } } },
+            { new: true }
+        );
+
+        if (!note) {
+            return res.status(404).json({ message: 'Note not found!' });
+        }
+        res.status(200).json(note)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const toggleCheckListItem = async (req, res) => {
+    const { noteId, itemId } = req.params;
+
+    try {
+        const note = await Note.findOneAndUpdate(
+            { _id: noteId, "checklist._id": itemId, userId: req.user.id },
+            { $set: { "checklist.$.done": req.body.done } },
+            { new: true }
+        );
+
+        if (!note) {
+            return res.status(404).json({ message: 'Note not found!' });
+        }
+        res.status(200).json(note);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const removeChecklistItem = async (req, res) => {
+    const { noteId, itemId } = req.params;
+
+    try {
+        const note = await Note.findOneAndUpdate(
+            { _id: noteId, userId: req.user.id },
+            { $pull: { checklist: { _id: itemId } } },
+            { new: true }
+        );
+
+        if (!note) {
+            return res.status(404).json({ message: "Note or item not found!" });
+        }
+
+        res.status(200).json(note);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
