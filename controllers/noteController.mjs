@@ -157,11 +157,12 @@ export const setReminder = async (req, res) => {
         }
         res.status(200).json(note);
     } catch (error) {
+        logger.error(`Error to set reminder note with ID ${id}: ${error.message}`);
         res.status(500).json({ message: error.message });
     }
 };
 
-export const addCheckListItem = async (req, res) => {
+export const addChecklistItem = async (req, res) => {
     const { noteId } = req.params;
     const { item } = req.body;
 
@@ -177,11 +178,30 @@ export const addCheckListItem = async (req, res) => {
         }
         res.status(200).json(note)
     } catch (error) {
+        logger.error(`Error to add checklist note with ID ${noteId}: ${error.message}`);
         res.status(500).json({ message: error.message });
     }
 };
 
-export const toggleCheckListItem = async (req, res) => {
+export const getChecklistItems = async (req, res) => {
+    const { noteId } = req.params;
+
+    try {
+        const note = await Note.findOne({ _id: noteId, userId: req.user.id });
+
+        if (!note) {
+            return res.status(404).json({ message: 'Note not found!' });
+        }
+
+        res.status(200).json(note.checklist);
+    } catch (error) {
+        logger.error(`Error to get checklist note with ID ${noteId}: ${error.message}`);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const toggleChecklistItem = async (req, res) => {
     const { noteId, itemId } = req.params;
 
     try {
@@ -196,9 +216,11 @@ export const toggleCheckListItem = async (req, res) => {
         }
         res.status(200).json(note);
     } catch (error) {
+        logger.error(`Error to check note with ID ${noteId}: ${error.message}`);
         res.status(500).json({ message: error.message });
     }
 };
+
 
 export const removeChecklistItem = async (req, res) => {
     const { noteId, itemId } = req.params;
@@ -216,6 +238,7 @@ export const removeChecklistItem = async (req, res) => {
 
         res.status(200).json(note);
     } catch (error) {
+        logger.error(`Error to remove checklist note with ID ${noteId}: ${error.message}`);
         res.status(500).json({ message: error.message });
     }
 };

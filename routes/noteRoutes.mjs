@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, deleteNote, getNotes, reorderNotes, setReminder, toggleArchiveNote, togglePinNote, updateNote, addChecklistItem, toggleChecklistItem, removeChecklistItem } from '../controllers/noteController.mjs';
+import { createNote, deleteNote, getNotes, reorderNotes, setReminder, toggleArchiveNote, togglePinNote, updateNote, addChecklistItem, getChecklistItems, toggleChecklistItem, removeChecklistItem } from '../controllers/noteController.mjs';
 import { authenticateJWT } from '../middlewares/auth.mjs';
 
 const router = express.Router();
@@ -348,13 +348,15 @@ router.patch('/:id/pin', authenticateJWT, togglePinNote);
  */
 router.patch('/:id/setReminder', authenticateJWT, setReminder);
 
-router.post('/notes/:noteId/checklist', addChecklistItem);
 
-// Atualizar status do item do checklist
-router.patch('/notes/:noteId/checklist/:itemId', toggleChecklistItem);
+// checklist 
+router.post('/:noteId/checklist', authenticateJWT, addChecklistItem);
 
-// Remover item do checklist
-router.delete('/notes/:noteId/checklist/:itemId', removeChecklistItem);
+router.get('/:noteId/checklist', authenticateJWT, getChecklistItems);
+
+router.patch('/:noteId/checklist/:itemId/toggle', authenticateJWT, toggleChecklistItem);
+
+router.delete('/:noteId/checklist/:itemId', authenticateJWT, removeChecklistItem);
 
 
 /**
