@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export const authenticateJWT = (req, res, next) => {
     const token = req.header('Authorization')?.split(" ")[1]; // token should be a bearer <token>
     if (!token) {
-        return res.sendStatus(403); // Forbiden
+        return res.sendStatus(403);
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {

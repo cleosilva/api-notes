@@ -20,7 +20,7 @@ describe('note API', () => {
                     "done": false
                 }
             ],
-            "archived": false,
+            "isArchived": false,
             "isPinned": false,
             "order:": 0
 
@@ -33,7 +33,7 @@ describe('note API', () => {
         expect(response.statusCode).toBe(201);
         expect(response.body.title).toBe(noteData.title);
         expect(response.body.content).toBe(noteData.content);
-        expect(response.body.archived).toBe(false);
+        expect(response.body.isArchived).toBe(false);
 
         noteId = response.body._id
     });
@@ -47,7 +47,7 @@ describe('note API', () => {
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBeGreaterThan(0);
         response.body.forEach(note => {
-            expect(note).toHaveProperty("archived");
+            expect(note).toHaveProperty("isArchived");
         });
     });
 
@@ -57,14 +57,14 @@ describe('note API', () => {
             .set('Authorization', `Bearer ${token}`);
 
         expect(archiveResponse.statusCode).toBe(200);
-        expect(archiveResponse.body.note.archived).toBe(true);
+        expect(archiveResponse.body.note.isArchived).toBe(true);
 
         const unarchiveResponse = await request(app)
             .patch(`/api/v1/notes/${noteId}/archive`)
             .set('Authorization', `Bearer ${token}`);
 
         expect(unarchiveResponse.statusCode).toBe(200);
-        expect(unarchiveResponse.body.note.archived).toBe(false);
+        expect(unarchiveResponse.body.note.isArchived).toBe(false);
     });
 
     it('should update a note', async () => {
@@ -82,7 +82,7 @@ describe('note API', () => {
                     "done": false
                 }
             ],
-            "archived": false,
+            "isArchived": false,
             "isPinned": false,
             "order:": 0
         }
@@ -94,7 +94,7 @@ describe('note API', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body.title).toBe(updatedData.title);
         expect(response.body.content).toBe(updatedData.content);
-        expect(response.body.archived).toBe(false);
+        expect(response.body.isArchived).toBe(false);
     });
 
     it('should pin a note', async () => {

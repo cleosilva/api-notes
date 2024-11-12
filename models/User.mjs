@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
             message: (props) => `${props.value} invalid email!`
         }
     },
-    password: { type: String, required: true, minlength: [8, 'The password should be 8 caracteres long'] }
+    password: { type: String, required: true, minlength: [8, 'The password should be 8 caracteres long'] },
+    refreshToken: { type: String }
 });
 
 userSchema.pre('save', async function (next) {

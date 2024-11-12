@@ -12,7 +12,7 @@ const noteschema = new mongoose.Schema({
     color: { type: String, default: '#ffffff' },
     checklist: [ckeckListItemSchema],
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    archived: { type: Boolean, default: false },
+    isArchived: { type: Boolean, default: false },
     isPinned: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
     reminder: Date,

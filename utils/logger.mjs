@@ -9,7 +9,7 @@ const logger = winston.createLogger({
         })
     ),
     transports: [
-        new winston.transports.Console(), // show the log in the console
+        new winston.transports.Console(),
     ],
 });
 
