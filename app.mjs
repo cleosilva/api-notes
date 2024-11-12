@@ -9,9 +9,23 @@ import tagRoutes from './routes/tagRoutes.mjs'
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import logger from './utils/logger.mjs';
+import { Server } from 'socket.io';
+import http from 'http';
+import checkReminders from './utils/reminderUtils.mjs';
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PATCH', 'DELETE']
+    }
+});
 connectDB();
+
+setInterval(() => {
+    checkReminders();
+}, 60000);
 
 app.use(express.json());
 app.use(helmet());
@@ -74,7 +88,7 @@ const swaggerOptions = {
                             items: { $ref: '#/components/schemas/CheckListItem' }
                         },
                         userId: { type: 'string' },
-                        archived: { type: 'boolean', default: false },
+                        isArchived: { type: 'boolean', default: false },
                         isPinned: { type: 'boolean', default: false },
                         order: { type: 'number', default: 0 },
                         reminder: Date,
@@ -93,14 +107,21 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+io.on('connection', (socket) => {
+    console.log('A user has logged in', socket.id);
+
+    socket.on('disconnect', (reason) => {
+        console.log("User disconnected:", socket.id, "Reason:", reason);
+        // Aqui, o servidor apenas registra a desconexão; ele não precisa tentar reconectar
+    });
+});
+
 const PORT = process.env.PORT || 5000;
 
-
-
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`Server running on PORT:${PORT}`);
     });
 }
 
-export default app;
+export { server, app, io };

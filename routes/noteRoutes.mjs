@@ -349,13 +349,177 @@ router.patch('/:id/pin', authenticateJWT, togglePinNote);
 router.patch('/:id/setReminder', authenticateJWT, setReminder);
 
 
-// checklist 
+/**
+ * @swagger
+ * /notes/{noteId}/checklist:
+ *   post:
+ *     summary: Add a checklist item for a note
+ *     description: Creates a new checklist item for the specified note.
+ *     tags: [Checklist]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: noteId
+ *         required: true
+ *         schema: 
+ *           type: string
+ *         description: ID of the note.
+ *     requestBody:
+ *       required: true
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties: 
+ *               item:
+ *                 type: string
+ *                 example: Buy Milk
+ *     responses:
+ *       201:
+ *         description: Checklist item added successfully.
+ *       400:
+ *         description: Invalid time format or note ID.
+ *       403:
+ *         description: Unauthorized user.
+ *       404:
+ *         description: Note not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
 router.post('/:noteId/checklist', authenticateJWT, addChecklistItem);
 
+/**
+ * @swagger
+ * /notes/{noteId}/checklist:
+ *   get:
+ *     summary: Obtém os itens de checklist de uma nota
+ *     description: Retorna todos os itens de checklist associados à nota especificada.
+ *     tags:
+ *       - Checklist
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: noteId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da nota
+ *     responses:
+ *       200:
+ *         description: Lista de itens de checklist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 checklist:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       content:
+ *                         type: string
+ *                       done:
+ *                         type: boolean
+ *       401:
+ *         description: Não autorizado
+ */
 router.get('/:noteId/checklist', authenticateJWT, getChecklistItems);
 
+/**
+ * @swagger
+ * /notes/{noteId}/checklist/{itemId}/toggle:
+ *   patch:
+ *     summary: Alterna o status de um item da checklist
+ *     description: Alterna o status de um item específico na checklist da nota (feito ou não feito).
+ *     tags:
+ *       - Checklist
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: noteId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da nota
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do item de checklist
+ *     responses:
+ *       200:
+ *         description: Status do item alternado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Status do item alternado"
+ *                 item:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     content:
+ *                       type: string
+ *                     done:
+ *                       type: boolean
+ *       404:
+ *         description: Item de checklist não encontrado
+ *       401:
+ *         description: Não autorizado
+ */
 router.patch('/:noteId/checklist/:itemId/toggle', authenticateJWT, toggleChecklistItem);
 
+/**
+ * @swagger
+ * /notes/{noteId}/checklist/{itemId}:
+ *   delete:
+ *     summary: Remove um item da checklist
+ *     description: Exclui um item específico da checklist da nota.
+ *     tags:
+ *       - Checklist
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: noteId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da nota
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do item de checklist
+ *     responses:
+ *       200:
+ *         description: Item de checklist removido com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item removido com sucesso"
+ *       404:
+ *         description: Item de checklist não encontrado
+ *       401:
+ *         description: Não autorizado
+ */
 router.delete('/:noteId/checklist/:itemId', authenticateJWT, removeChecklistItem);
 
 
