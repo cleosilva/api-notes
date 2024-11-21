@@ -1,7 +1,7 @@
 import { Note } from "../models/Note.mjs";
 import mongoose from "mongoose";
 import logger from '../utils/logger.mjs';
-import { io } from '../app.mjs';
+import { io } from '../server.mjs';
 
 export const createNote = async (req, res) => {
     try {
@@ -154,6 +154,10 @@ export const togglePinNote = async (req, res) => {
 export const setReminder = async (req, res) => {
     const { id } = req.params;
     const { reminder } = req.body;
+
+    if (!reminder || isNaN(new Date(reminder).getTime())) {
+        return res.status(400).json({ message: "Invalid or missing reminder format. Please provide a valid date-time string." });
+    }
 
     try {
         const note = await Note.findByIdAndUpdate(id, { reminder, notified: false }, { new: true });

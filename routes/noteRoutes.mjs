@@ -313,7 +313,7 @@ router.patch('/:id/pin', authenticateJWT, togglePinNote);
 
 /**
  * @swagger
- * /notes/{id}/reminder:
+ * /notes/{id}/setReminder:
  *   patch:
  *     summary: Sets a reminder for a note
  *     description: Sets a reminder for a specific note to notify the user at the specified time.
@@ -327,13 +327,17 @@ router.patch('/:id/pin', authenticateJWT, togglePinNote);
  *         schema:
  *           type: string
  *         description: ID of the note to set a reminder for.
- *       - in: query
- *         name: time
- *         required: true
- *         schema:
- *           type: string
- *           format: date-time
- *         description: Time to set the reminder.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reminder:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Time to set the reminder.
  *     responses:
  *       200:
  *         description: Reminder set successfully.
@@ -346,6 +350,7 @@ router.patch('/:id/pin', authenticateJWT, togglePinNote);
  *       500:
  *         description: Internal server error.
  */
+
 router.patch('/:id/setReminder', authenticateJWT, setReminder);
 
 

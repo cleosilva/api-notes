@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { Note } from '../models/Note.mjs';
-import { io } from '../app.mjs';
+import { io } from '../server.mjs';
 import logger from '../utils/logger.mjs';
 
 
