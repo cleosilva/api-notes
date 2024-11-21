@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Tag } from "../models/Tag.mjs";
 import logger from '../utils/logger.mjs';
 
@@ -53,12 +54,20 @@ export const getTagById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const tag = await Tag.findOne({ _id: id, userId: req.user.id });
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid tag ID format" });
+        }
+
+        const tag = await Tag.findById(id);
 
         if (!tag) {
             return res.status(404).json({ message: "Tag not found or not authorized" });
         }
 
+        if (tag.userId.toString() !== req.user.id) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+        logger.info(`Tag ${id} is found for user ${req.user.id}`);
         res.status(200).json(tag);
     } catch (error) {
         logger.error(`Error fetching tag: ${error.message}`);
