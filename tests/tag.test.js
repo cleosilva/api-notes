@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../app.mjs";
+import app from "../app.mjs";
 
 const token = process.env.BEARER_TOKEN_TEST;
 let tagId;

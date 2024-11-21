@@ -1,7 +1,7 @@
 import { Note } from "../models/Note.mjs";
 import mongoose from "mongoose";
 import logger from '../utils/logger.mjs';
-import { io } from '../app.mjs';
+import { io } from '../server.mjs';
 
 export const createNote = async (req, res) => {
     try {
