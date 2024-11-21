@@ -23,9 +23,9 @@ const io = new Server(server, {
 });
 connectDB();
 
-setInterval(() => {
-    checkReminders();
-}, 60000);
+
+checkReminders();
+
 
 app.use(express.json());
 app.use(helmet());
