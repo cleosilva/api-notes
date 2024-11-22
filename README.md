@@ -14,10 +14,12 @@ The purpose of this project is to provide a sample API for a note-taking system,
   * List all notes
   * Update note (including features like pinning, color change, and archiving)
   * Delete note
-* **User authorization** for accessing specific notes
-* **Route protection** using authentication middleware
-* **Swagger documentation** for easy integration and testing
-* **Real-time notifications** using WebSockets for note reminders
+* **Checklist support** for notes, allowing the creation of to-do lists within notes.
+* **Real-time notifications** using WebSockets for note reminders and checklist updates.
+* **Undo action** for archiving notes.
+* **Tagging system** for better organization of notes.
+* **Route protection** using authentication middleware.
+* **Swagger documentation** for easy integration and testing.
 
 ## Technologies Used
 
@@ -41,27 +43,39 @@ This project follows a modular architecture, known as **Model-Routes-Controller 
 ```plaintext
 notes-api/
 ├── config/                   # General project configuration
-│   └── db.js                 # Database connection
+│   └── db.mjs                # Database connection
 ├── controllers/              # API operation logic
-│   ├── noteController.js     # Note controller (manage notes)
-│   └── userController.js     # User controller (manage users)
+│   ├── noteController.mjs    # Note controller
+│   ├── userController.mjs    # User controller
+│   └── tagController.mjs     # Tag controller
 ├── models/                   # Data models
-│   ├── Note.js               # Note model
-│   └── User.js               # User model
+│   ├── Note.mjs              # Note model
+│   ├── User.mjs              # User model
+│   └── Tag.mjs               # Tag model
 ├── middlewares/              # Middleware for validation and authentication
-│   └── auth.js               # JWT authentication middleware
+│   ├── authMiddleware.mjs    # JWT authentication middleware
+│   └── logMiddleware.mjs     # Logging middleware
 ├── routes/                   # API route definitions
-│   ├── noteRoutes.js         # Note-related routes
-│   └── userRoutes.js         # User-related routes
+│   ├── noteRoutes.mjs        # Note-related routes
+│   ├── userRoutes.mjs        # User-related routes
+│   └── tagRoutes.mjs         # Tag-related routes
+├── swagger/                  # Swagger documentation configuration
+│   └── swaggerConfig.mjs     # Swagger setup
+|   └── swaggerSchemas.mjs    # Swagger schemas
 ├── tests/                    # Unit and integration tests
-│   ├── note.test.js          # Note tests
-│   └── user.test.js          # User tests
+│   ├── note.test.mjs         # Note tests
+│   ├── user.test.mjs         # User tests
+│   └── tag.test.mjs          # Tag tests
 ├── utils/                    # Utility functions and helpers
-│   └── logger.js             # Custom logger function (optional)
+│   ├── logger.mjs            # Custom logger
+│   └── reminderUtils.mjs     # Reminder checker
+├── websockets/               # WebSocket server
+│   └── socketServer.mjs      # Handles WebSocket events
+├── app.mjs                   # App initialization
+├── server.mjs                # Server setup and startup
+├── package.json              # Project dependencies and scripts
 ├── .env                      # Environment variables
 ├── .gitignore                # Git ignore file
-├── app.js                    # Express server setup and configuration
-├── package.json              # Project dependencies and scripts
 └── README.md                 # Project documentation
 ```` 
 
@@ -93,7 +107,7 @@ npm install
 ````
 3. Set up the .env file:
 ````Bash
-PORT=3000
+PORT=5000
 MONGODB_URI=your_mongo_uri
 JWT_SECRET=your_secret_key
 ````
@@ -113,24 +127,33 @@ npm test
 ### Endpoints
 
 #### Authentication
-* POST /api/users/register - Registers a new user
-* POST /api/users/login - Authenticates a user and returns a JWT token
+* **POST /api/v1/users/register** - Registers a new user
+* **POST /api/v1/users/login** - Authenticates a user and returns a JWT token
 
 #### notes
-* **POST /api/notes**: Creates a new note (authenticated)
-* **GET /api/notes**: Retrieves all notes for the authenticated user
-* **GET /api/notes/**
+* **POST /api/v1/notes**: Creates a new note (authenticated)
+* **GET /api/v1/notes**: Retrieves all notes for the authenticated user
+* **GET /api/v1/notes/:id**
   : Retrieves a single note by ID (authenticated)
-* **PUT /api/notes/**
+* **PUT /api/v1/notes/:id**
   : Updates a note (authenticated) — can update features like pinning, color change, and archiving
-* **DELETE /api/notes/**
+* **DELETE /api/notes/:id**
   : Deletes a note (authenticated)
+
+#### Tags
+* **POST /api/v1/tags**: Creates a new tag.
+* GET **/api/v1/tags**: Retrieves all tags for the authenticated user.
+
+#### WebSocket Features
+* **Real-time reminders**: Receives a notification when a reminder is triggered.
+* **Checklist updates**: Updates checklist status in real time.
 
 ### Example Note Features
 * **Pinning**: Notes can be pinned to always appear at the top of the list.
 * **Color Change**: Notes can have customizable background colors.
 * **Archiving**: Notes can be archived and unarchived.
 * **Reminder**: Notes can have reminders that are triggered using WebSockets for real-time notifications.
+* **Checklist**: Supports adding, toggling, and removing checklist items.
 
 ### Swagger Documentation
 ````bash
